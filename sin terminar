@@ -1,0 +1,176 @@
+import discord
+import pyttsx3
+import os
+from discord.ext import commands
+engine = pyttsx3.init() # object creation
+
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+# RATE
+rate = engine.getProperty('rate')   # getting details of current speaking rate
+print (rate)                        # printing current voice rate
+engine.setProperty('rate', 125)     # setting up new voice rate
+volume = engine.getProperty('volume')   # getting to know current volume level (min=0 and max=1)
+print (volume)                          # printing current volume level
+engine.setProperty('volume',1.0)        # setting up volume level  between 0 and 1
+voices = engine.getProperty('voices')       # getting details of current voice
+#engine.setProperty('voice', voices[0].id)  # changing index, changes voices. o for male
+engine.setProperty('voice', voices[1].id)   # changing index, changes voices. 1 for female
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Hi! I am a bot {bot.user}!')
+
+
+@bot.command()
+async def heh(ctx, count_heh=5):
+    await ctx.send("he" * count_heh)
+
+
+@bot.command()
+async def calentamiento_global(ctx):
+    await ctx.send(f"""Hola, soy un bot {bot.user}!""")
+    # comentarios
+    await ctx.send("¿Quieres saber saber que es el calentamiento global?")
+
+    # Esperar la respuesta del usuario
+
+    def check(message):
+        return message.author == ctx.author and message.channel == ctx.channel and message.content in ['si', 'no']
+    response = await bot.wait_for('message', check=check)
+    if response:
+        if response.content:
+            await ctx.send("El calentamiento global, es el incremento de la temperatura de la atmósfera terrestres asociado en parte a la emisión de gases de efecto invernadero.")
+        else:
+            await ctx.send("esta bien, si quieres saber del tema en otro momento, usa el mismo comando")
+    else:
+        await ctx.send("Lo siento, no pude entender tu respuesta. Inténtalo de nuevo.")
+    await ctx.send("¿Quieres saber mas del Calentamiento Global?")
+    def check1(message):
+        return message.author == ctx.author and message.channel == ctx.channel and message.content in ['si', 'no']
+    response1 = await bot.wait_for('message', check=check1)
+    if response1:
+        if response1.content:
+            await ctx.send("el cambio climático se refiere a cambios a largo plazo de las temperaturas y los patrones climáticos.")
+            await ctx.send("No siempre estos cambios son naturales, pero en la actualidad están muy influenciados por la acción humana.")
+            await ctx.send("puedes preguntar lo siguiente:")
+            await ctx.send("-¿Es grave este problema? ¿Nos concierne?")
+            await ctx.send("-¿Qué desencadena el cambio climático?")
+            await ctx.send("-¿Cómo podemos frenar el cambio climático?")
+            await ctx.send("-fuentes")
+            await ctx.send("-ejemplo")
+            def check2(message):
+                return message.author == ctx.author and message.channel == ctx.channel and message.content in ['¿Es grave este problema? ¿Nos concierne?', '¿Es grave este problema?', '¿Nos concierne?']
+            response2 = await bot.wait_for('message', check=check2)
+            if response2:
+                if response2.content:
+                    await ctx.send("Sí, es un problema muy grave, y nos concierne de forma directa.")
+                    await ctx.send("-Los impactos ya son visibles: derretimiento de glaciares, aumento del nivel del mar, acidificación de los océanos, incendios, sequías, tormentas más intensas.")
+                    await ctx.send("Si no se actúa con decisión, las proyecciones indican aumentos de temperatura que podrían superar los 3 °C para fin de siglo, con impactos irreversibles en ecosistemas y sociedades.")
+                else:
+                    ctx.send("Esta bien, mas tarde si te interesa, pon el mismo comando")
+            def check3(message):
+                return message.author == ctx.author and message.channel == ctx.channel and message.content in ['¿Qué desencadena el cambio climático?']
+            response3 = await bot.wait_for('message', check=check3)
+            if response3:
+                if response3.content:
+                    await ctx.send("las causas suelen ser normales y antropogénicas (humanas):")
+                    await ctx.send("algo normal son los cambios en la actividad volcánica, variaciones en la radiación solar y cambios orbitales de la Tierra.")
+                    await ctx.send("las causas antropogénicas:")
+                    await ctx.send("-La quema de combustibles fósiles (carbón, petróleo, gas) es la principal fuente de emisiones de dióxido de carbono (CO₂)")
+                    await ctx.send("-La deforestación y degradación de bosques: al talar árboles se libera el CO₂ almacenado y se reduce la capacidad de absorción de carbono.")
+                else:
+                    ctx.send("Esta bien, mas tarde si te interesa, pon el mismo comando")
+            def check4(message):
+                return message.author == ctx.author and message.channel == ctx.channel and message.content in ['¿Cómo podemos frenar el cambio climático?']
+            response4 = await bot.wait_for('message', check=check4)
+            if response4:
+                if response4.content:
+                    await ctx.send("hay diversas estrategias para mitigarlo, adaptarse y transformarnos hacia una economía más limpia.")
+                    await ctx.send("Reducion de emiciones:")
+                    await ctx.send("-Transición hacia energías renovables (solar, eólica, hidroeléctrica)")
+                    await ctx.send("-Mejorar la eficiencia energética (consumir menos energía)")
+                    await ctx.send("-Reforestar, conservar bosques y detener la deforestación.")
+                    await ctx.send("Adaptación:")
+                    await ctx.send("-Construcción de infraestructuras resistentes al clima (presas, drenaje, viviendas seguras).")
+                    await ctx.send("-Agricultura resistente: cultivos que toleran sequía o inundaciones.")
+                    await ctx.send("Cambio estructural y cooperación:")
+                    await ctx.send("-Los países deben adoptar compromisos ambiciosos para reducir emisiones (por ejemplo bajo el Acuerdo de París).")
+                    await ctx.send("-Educación, concienciación y participación ciudadana: todos podemos aportar cambios de hábitos y presionar políticas más sostenibles.")
+                else:
+                    ctx.send("Esta bien, mas tarde si te interesa, pon el mismo comando")
+            def check5(message):
+                return message.author == ctx.author and message.channel == ctx.channel and message.content in ['fuentes']
+            response5 = await bot.wait_for('message', check=check5)
+            if response5:
+                if response5.content:
+                    await ctx.send("-https://www.un.org/es/un75/climate-crisis-race-we-can-win")
+                    await ctx.send("-https://www.un.org/es/climatechange/science/causes-effects-climate-change")
+                    await ctx.send("-https://www.manosunidas.org/observatorio/cambio-climatico/calentamiento-global")
+                else:
+                    ctx.send("Esta bien, mas tarde si te interesa, pon el mismo comando")
+
+            def check6(message):
+                return message.author == ctx.author and message.channel == ctx.channel and message.content in ['ejemplo']
+            response6 = await bot.wait_for('message', check=check6)
+            if response6:
+                if response1.content == "fuentes":
+                    image_path = 'CC.jpg'
+        
+                # Verificar si el archivo existe antes de enviarlo
+                if os.path.exists(image_path):
+                    with open(image_path, 'rb') as f:
+                        picture = discord.File(f)
+                        await ctx.send("Aquí tienes un ejemplo de Calentamiento Global:", file=picture)
+                else:
+                    await ctx.send("Lo siento, no pude encontrar la imagen. Verifica que la ruta sea correcta.")            
+
+    else:
+        ctx.send("Esta bien, mas tarde si te interesa, pon el mismo comando")
+
+@bot.command()
+async def test(ctx):
+    await ctx.send(f"""
+    Hola, soy un bot {bot.user}!
+    """)
+    #comentarios
+ 
+    await ctx.send("¿Quieres que te haga unas preguntas del calentamiento global?")
+    # Esperar la respuesta del usuario
+    def check(message):
+        return message.author == ctx.author and message.channel == ctx.channel and message.content in ['si', 'no']
+    response = await bot.wait_for('message', check=check)
+    if response:
+        if response.content:
+            await ctx.send("""¿El cambio climático es considerado un problema grave para la humanidad?
+            
+            """)
+            def check(message):
+                return message.author == ctx.author and message.channel == ctx.channel and message.content in ['si', 'no']
+            response = await bot.wait_for('message', check=check)
+            if response:
+                if response.content:
+                    await ctx.send("""¿El cambio climático es considerado un problema grave para la humanidad?
+            
+            """)
+                
+
+ 
+        else:
+            await ctx.send("Está bien, si alguna vez necesitas saber sobre otro tema, estaremos en contacto.")
+    else:
+        await ctx.send("Lo siento, no pude entender tu respuesta. Inténtalo de nuevo.")
+
+
+
+
+bot.run("TOKEN")
